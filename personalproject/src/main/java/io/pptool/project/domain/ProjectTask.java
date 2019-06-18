@@ -1,6 +1,8 @@
 package io.pptool.project.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -10,7 +12,7 @@ public class ProjectTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(updatable = false)
+    @Column(updatable = false,unique = true)
     private String projectSequence;
     @NotBlank(message = "Please enter task summary")
     private String summary;
@@ -22,6 +24,11 @@ public class ProjectTask {
     private String projectIdentifier;
     private Date created_At;
     private Date updated_At;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "backlog_id",updatable = false,nullable = false)
+    @JsonIgnore
+    private Backlog backlog;
 
     public ProjectTask() {
     }
@@ -104,6 +111,14 @@ public class ProjectTask {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @PrePersist
