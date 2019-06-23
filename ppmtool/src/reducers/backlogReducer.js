@@ -1,6 +1,6 @@
 import { GET_BACKLOG, GET_PROJECT_TASK, DELETE_PROJECT_TASK } from "../actions/types"
 
-const initialState = { project_tasks: [], project_task: [] }
+const initialState = { project_tasks: [], project_task: {} }
 
 export default function (state = initialState, action) {
     switch (action.type) {
@@ -16,7 +16,10 @@ export default function (state = initialState, action) {
             }
         case DELETE_PROJECT_TASK:
             return {
-                ...state
+                ...state,
+                project_tasks: state.project_tasks.filter(
+                    project_task => project_task.projectSequence !== action.payload
+                )
             }
         default:
             return state;
